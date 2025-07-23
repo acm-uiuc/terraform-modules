@@ -105,7 +105,7 @@ resource "aws_cloudwatch_event_rule" "warmer_schedule" {
 }
 
 resource "aws_lambda_permission" "warmer_lambda_permission" {
-  function_name = "${var.function_to_warm}-warmer"
+  function_name = aws_lambda_function.warmer_function.function_name
   action        = "lambda:InvokeFunction"
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.warmer_schedule.arn
