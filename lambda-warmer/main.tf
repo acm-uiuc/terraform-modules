@@ -111,3 +111,7 @@ resource "aws_lambda_permission" "warmer_lambda_permission" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.warmer_schedule.arn
 }
+resource "aws_cloudwatch_event_target" "warmer_invoke_target" {
+  rule = aws_cloudwatch_event_rule.warmer_schedule.name
+  arn  = aws_lambda_function.warmer_function.arn
+}
