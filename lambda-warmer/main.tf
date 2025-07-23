@@ -41,7 +41,7 @@ resource "aws_lambda_function" "warmer_function" {
   filename         = data.archive_file.warmer_code.output_path
   runtime          = "nodejs22.x"
   source_code_hash = data.archive_file.warmer_code.output_base64sha256
-  role             = aws_iam_role.warmer_iam_role
+  role             = aws_iam_role.warmer_iam_role.arn
   function_name    = "${var.function_to_warm}-warmer"
   memory_size      = 256
   timeout          = 15
@@ -62,7 +62,7 @@ resource "aws_lambda_alias" "warmer_function_alias" {
 
 resource "aws_iam_role_policy" "warmer_log_write_policy" {
   name = "warmer_log_write_policy"
-  role = aws_iam_role.warmer_iam_role
+  role = aws_iam_role.warmer_iam_role.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -82,7 +82,7 @@ resource "aws_iam_role_policy" "warmer_log_write_policy" {
 
 resource "aws_iam_role_policy" "warmer_lambda_invoke_policy" {
   name = "warmer_lambda_invoke_policy"
-  role = aws_iam_role.warmer_iam_role
+  role = aws_iam_role.warmer_iam_role.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
