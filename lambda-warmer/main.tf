@@ -32,7 +32,7 @@ resource "aws_iam_role" "warmer_iam_role" {
 data "archive_file" "warmer_code" {
   type        = "zip"
   source_dir  = "${path.module}/lambda"
-  output_path = "${path.module}/lambda/function.zip"
+  output_path = "${path.module}/function.zip"
 }
 
 resource "aws_lambda_function" "warmer_function" {
@@ -44,6 +44,7 @@ resource "aws_lambda_function" "warmer_function" {
   source_code_hash = data.archive_file.warmer_code.output_base64sha256
   role             = aws_iam_role.warmer_iam_role.arn
   function_name    = "${var.function_to_warm}-warmer"
+  description      = "Scheduled invocation to warm ${var.num_desired_warm_instances} instances of function ${var.function_to_warm}."
   memory_size      = 256
   timeout          = 15
   environment {
