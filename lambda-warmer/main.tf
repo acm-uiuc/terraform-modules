@@ -6,6 +6,7 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
 resource "aws_cloudwatch_log_group" "warmer_logs" {
   name              = "/aws/lambda/${var.function_to_warm}-warmer"
   retention_in_days = var.log_retention_days
