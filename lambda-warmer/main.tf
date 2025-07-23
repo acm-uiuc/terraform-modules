@@ -40,6 +40,7 @@ resource "aws_lambda_function" "warmer_function" {
   architectures    = ["arm64"]
   filename         = data.archive_file.warmer_code.output_path
   runtime          = "nodejs22.x"
+  handler          = "lambda.handler"
   source_code_hash = data.archive_file.warmer_code.output_base64sha256
   role             = aws_iam_role.warmer_iam_role.arn
   function_name    = "${var.function_to_warm}-warmer"
