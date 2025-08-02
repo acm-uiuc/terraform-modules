@@ -93,7 +93,7 @@ resource "aws_iam_role_policy" "warmer_lambda_invoke_policy" {
           "lambda:InvokeFunction"
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.function_to_warm}"
+        Resource = "arn:aws:lambda:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:function:${var.function_to_warm}"
       },
     ]
   })
