@@ -75,7 +75,7 @@ resource "aws_iam_role_policy" "warmer_log_write_policy" {
           "logs:PutLogEvents"
         ]
         Effect   = "Allow"
-        Resource = aws_cloudwatch_log_group.warmer_logs.arn
+        Resource = "${aws_cloudwatch_log_group.warmer_logs.arn}:*"
       },
     ]
   })
