@@ -16,7 +16,7 @@ variable "invoke_rate_string" {
 }
 
 variable "is_streaming_lambda" {
-  type        = boolean
+  type        = bool
   description = "Set to true if the lambda streams its responses instead of buffering. By default, Lambdas buffer responses."
   default     = false
 }
