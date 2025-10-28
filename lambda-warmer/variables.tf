@@ -21,3 +21,8 @@ variable "num_desired_warm_instances" {
   description = "Number of warm lambda instances desired"
   default     = 3
 }
+
+variable "region" {
+  type        = string
+  description = "AWS Region to deploy to"
+}

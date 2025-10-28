@@ -9,6 +9,7 @@ terraform {
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 resource "aws_cloudwatch_log_group" "warmer_logs" {
+  region            = var.region
   name              = "/aws/lambda/${var.function_to_warm}-warmer"
   retention_in_days = var.log_retention_days
 }
@@ -36,6 +37,7 @@ data "archive_file" "warmer_code" {
 }
 
 resource "aws_lambda_function" "warmer_function" {
+  region           = var.region
   depends_on       = [aws_cloudwatch_log_group.warmer_logs]
   architectures    = ["arm64"]
   filename         = data.archive_file.warmer_code.output_path
@@ -56,6 +58,7 @@ resource "aws_lambda_function" "warmer_function" {
 }
 
 resource "aws_lambda_alias" "warmer_function_alias" {
+  region           = var.region
   name             = "live"
   description      = "Live environment alias"
   function_name    = aws_lambda_function.warmer_function.arn
@@ -100,18 +103,22 @@ resource "aws_iam_role_policy" "warmer_lambda_invoke_policy" {
 }
 
 resource "aws_cloudwatch_event_rule" "warmer_schedule" {
+  region              = var.region
   description         = "Schedule to run warmer for ${var.function_to_warm}"
   schedule_expression = var.invoke_rate_string
   state               = "ENABLED"
 }
 
 resource "aws_lambda_permission" "warmer_lambda_permission" {
+  region        = var.region
   function_name = aws_lambda_function.warmer_function.function_name
   action        = "lambda:InvokeFunction"
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.warmer_schedule.arn
 }
+
 resource "aws_cloudwatch_event_target" "warmer_invoke_target" {
-  rule = aws_cloudwatch_event_rule.warmer_schedule.name
-  arn  = aws_lambda_function.warmer_function.arn
+  region = var.region
+  rule   = aws_cloudwatch_event_rule.warmer_schedule.name
+  arn    = aws_lambda_function.warmer_function.arn
 }
