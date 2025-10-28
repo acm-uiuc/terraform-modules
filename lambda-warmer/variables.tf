@@ -15,6 +15,11 @@ variable "invoke_rate_string" {
   default     = "rate(4 minutes)"
 }
 
+variable "is_streaming_lambda" {
+  type        = bool
+  description = "Set to true if the lambda streams its responses instead of buffering. By default, Lambdas buffer responses."
+  default     = false
+}
 
 variable "num_desired_warm_instances" {
   type        = number

@@ -53,6 +53,7 @@ resource "aws_lambda_function" "warmer_function" {
     variables = {
       LAMBDA_NAME   = var.function_to_warm
       NUM_INSTANCES = var.num_desired_warm_instances
+      IS_STREAMING = tostring(var.is_streaming_lambda)
     }
   }
 }
